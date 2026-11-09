@@ -1,0 +1,598 @@
+{
+  "id": "todo",
+  "name": "할 일",
+  "description": "묶음 아래 할 일을 트리로 두고 그 자리에서 끝냅니다",
+  "icon": {
+    "asset": "todo-icon",
+    "version": 1
+  },
+  "window_size": {
+    "width": 1040,
+    "height": 700
+  },
+  "single_window": true,
+  "requires": {
+    "blocks": 56,
+    "modules": {
+      "assets": 1,
+      "client": 1,
+      "storage": 3
+    }
+  },
+  "assets": [
+    {
+      "id": "todo-client",
+      "version": 1
+    },
+    {
+      "id": "todo-icon",
+      "version": 1
+    }
+  ],
+  "permissions": [],
+  "state": {
+    "view": "open",
+    "selected": null,
+    "adding": null
+  },
+  "storage": {
+    "entries": [
+      {
+        "id": "areas",
+        "key": "settings/areas",
+        "kind": "json",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "default": [
+          "업무",
+          "개인"
+        ],
+        "label": "묶음",
+        "description": "할 일을 나눌 묶음과 그 순서",
+        "presentation": "settings"
+      },
+      {
+        "id": "items",
+        "key": "items",
+        "kind": "json",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "area": {
+                "type": "string"
+              },
+              "parent": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "open",
+                  "done",
+                  "held"
+                ]
+              },
+              "date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "wait": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "done_on": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "created_on": {
+                "type": "string"
+              },
+              "order": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "area",
+              "status",
+              "order"
+            ],
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "default": [],
+        "label": "할 일",
+        "presentation": "hidden"
+      },
+      {
+        "id": "memos",
+        "key": "memos",
+        "kind": "md",
+        "collection": true,
+        "default": "",
+        "label": "메모",
+        "presentation": "hidden"
+      }
+    ]
+  },
+  "client": {
+    "runtime": "javascript",
+    "entry": {
+      "id": "todo-client",
+      "version": 1
+    },
+    "outputs": {
+      "loading": {
+        "default": true
+      },
+      "open_view": {
+        "default": false
+      },
+      "log_view": {
+        "default": false
+      },
+      "sections": {
+        "default": []
+      },
+      "log": {
+        "default": []
+      },
+      "area_options": {
+        "default": []
+      },
+      "has_selection": {
+        "default": false
+      },
+      "show_hint": {
+        "default": false
+      },
+      "d_title": {
+        "default": null
+      },
+      "d_area": {
+        "default": null
+      },
+      "d_date": {
+        "default": null
+      },
+      "d_wait": {
+        "default": null
+      },
+      "held": {
+        "default": false
+      },
+      "selected_title": {
+        "default": null
+      },
+      "add_title": {
+        "default": ""
+      },
+      "add_date": {
+        "default": null
+      }
+    },
+    "actions": [
+      "check",
+      "add",
+      "edit",
+      "toggle_hold",
+      "remove",
+      "open_add_area",
+      "open_add_child",
+      "dialog_title",
+      "dialog_date",
+      "dialog_close"
+    ],
+    "state_keys": [
+      "view",
+      "selected",
+      "adding"
+    ],
+    "storage_entries": [
+      "items",
+      "areas"
+    ]
+  },
+  "ui": {
+    "type": "split",
+    "direction": "row",
+    "column_below": 640,
+    "sizes": [
+      58,
+      42
+    ],
+    "children": [
+      {
+        "type": "stack",
+        "direction": "column",
+        "gap": "none",
+        "fill": [
+          1,
+          2
+        ],
+        "children": [
+          {
+            "type": "toolbar",
+            "start": [
+              {
+                "type": "select",
+                "style": "segmented",
+                "value": {
+                  "state": "view"
+                },
+                "on_change": {
+                  "set_state": "view"
+                },
+                "options": [
+                  {
+                    "value": "open",
+                    "label": "할 일"
+                  },
+                  {
+                    "value": "log",
+                    "label": "기록"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "when",
+            "value": {
+              "client": "open_view"
+            },
+            "child": {
+              "type": "repeat",
+              "items": {
+                "client": "sections"
+              },
+              "key": "key",
+              "layout": "column",
+              "gap": "small",
+              "template": {
+                "type": "section",
+                "title": {
+                  "item": "name"
+                },
+                "collapsible": true,
+                "actions": [
+                  {
+                    "type": "button",
+                    "label": "할 일 추가",
+                    "icon": "plus",
+                    "icon_only": true,
+                    "variant": "ghost",
+                    "on_click": {
+                      "client": "open_add_area"
+                    }
+                  }
+                ],
+                "child": {
+                  "type": "tree",
+                  "items": {
+                    "item": "children"
+                  },
+                  "by": "children",
+                  "default_expanded": true,
+                  "selected": {
+                    "state": "selected"
+                  },
+                  "on_select": {
+                    "set_state": "selected"
+                  },
+                  "on_check": {
+                    "client": "check"
+                  },
+                  "item_menu": [
+                    {
+                      "label": "하위 할 일 추가",
+                      "on_select": {
+                        "client": "open_add_child"
+                      }
+                    },
+                    {
+                      "label": "보류",
+                      "on_select": {
+                        "client": "toggle_hold"
+                      }
+                    },
+                    {
+                      "label": "지우기",
+                      "danger": true,
+                      "confirm": {
+                        "title": "할 일을 지울까요?",
+                        "body": {
+                          "item": "title"
+                        },
+                        "ok": "지우기"
+                      },
+                      "on_select": {
+                        "client": "remove"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "when",
+            "value": {
+              "client": "log_view"
+            },
+            "child": {
+              "type": "tree",
+              "items": {
+                "client": "log"
+              },
+              "by": "children",
+              "default_expanded": true,
+              "selected": {
+                "state": "selected"
+              },
+              "on_select": {
+                "set_state": "selected"
+              },
+              "on_check": {
+                "client": "check"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "stack",
+        "direction": "column",
+        "gap": "none",
+        "fill": [
+          1,
+          2,
+          3
+        ],
+        "children": [
+          {
+            "type": "dialog",
+            "open": {
+              "expr": "$state.adding != null"
+            },
+            "title": "할 일 추가",
+            "close_label": "추가",
+            "on_confirm": {
+              "client": "add"
+            },
+            "on_close": {
+              "client": "dialog_close"
+            },
+            "child": {
+              "type": "stack",
+              "direction": "column",
+              "gap": "medium",
+              "children": [
+                {
+                  "type": "input",
+                  "kind": "text",
+                  "label": "제목",
+                  "value": {
+                    "client": "add_title"
+                  },
+                  "on_change": {
+                    "client": "dialog_title"
+                  }
+                },
+                {
+                  "type": "input",
+                  "kind": "date",
+                  "label": "날짜",
+                  "value": {
+                    "client": "add_date"
+                  },
+                  "on_change": {
+                    "client": "dialog_date"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "when",
+            "value": {
+              "client": "loading"
+            },
+            "child": {
+              "type": "stack",
+              "direction": "column",
+              "place": "center",
+              "children": [
+                {
+                  "type": "notice",
+                  "kind": "loading",
+                  "message": "할 일을 불러오는 중입니다"
+                }
+              ]
+            }
+          },
+          {
+            "type": "when",
+            "value": {
+              "client": "show_hint"
+            },
+            "child": {
+              "type": "stack",
+              "direction": "column",
+              "place": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "할 일을 고르면 여기에 보입니다"
+                }
+              ]
+            }
+          },
+          {
+            "type": "when",
+            "value": {
+              "client": "has_selection"
+            },
+            "child": {
+              "type": "stack",
+              "direction": "column",
+              "gap": "none",
+              "fill": [
+                1
+              ],
+              "children": [
+                {
+                  "type": "section",
+                  "title": "할 일",
+                  "child": {
+                    "type": "stack",
+                    "direction": "column",
+                    "gap": "small",
+                    "children": [
+                      {
+                        "type": "input",
+                        "kind": "text",
+                        "label": "제목",
+                        "value": {
+                          "client": "d_title"
+                        },
+                        "on_change": {
+                          "client": "edit",
+                          "args": "title"
+                        }
+                      },
+                      {
+                        "type": "select",
+                        "label": "묶음",
+                        "value": {
+                          "client": "d_area"
+                        },
+                        "options": {
+                          "client": "area_options"
+                        },
+                        "on_change": {
+                          "client": "edit",
+                          "args": "area"
+                        }
+                      },
+                      {
+                        "type": "input",
+                        "kind": "date",
+                        "label": "날짜",
+                        "value": {
+                          "client": "d_date"
+                        },
+                        "on_change": {
+                          "client": "edit",
+                          "args": "date"
+                        }
+                      },
+                      {
+                        "type": "input",
+                        "kind": "text",
+                        "label": "기다림",
+                        "placeholder": "누구나 무엇을 기다리는지",
+                        "value": {
+                          "client": "d_wait"
+                        },
+                        "on_change": {
+                          "client": "edit",
+                          "args": "wait"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "section",
+                  "title": "메모",
+                  "child": {
+                    "type": "stack",
+                    "direction": "column",
+                    "fill": [
+                      0
+                    ],
+                    "children": [
+                      {
+                        "type": "markdown",
+                        "document": {
+                          "entry": "memos",
+                          "doc": {
+                            "state": "selected"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "toolbar",
+                  "start": [
+                    {
+                      "type": "button",
+                      "label": "지우기",
+                      "variant": "danger",
+                      "confirm": {
+                        "title": "할 일을 지울까요?",
+                        "body": {
+                          "client": "selected_title"
+                        },
+                        "ok": "지우기"
+                      },
+                      "on_click": {
+                        "client": "remove"
+                      }
+                    }
+                  ],
+                  "end": [
+                    {
+                      "type": "button",
+                      "label": "보류",
+                      "pressed": {
+                        "client": "held"
+                      },
+                      "on_click": {
+                        "client": "toggle_hold"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

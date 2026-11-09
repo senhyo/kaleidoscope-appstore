@@ -1,0 +1,27 @@
+{
+  "summary": "묶음 아래 할 일을 트리로 두고 그 자리에서 끝냅니다",
+  "description": "묶음 아래에 할 일을 트리로 두고 그 자리에서 끝냅니다. 체크하면 취소선이 그 자리에 남고, 다음 날이 지나면 기록으로 옮겨집니다. 묶음은 앱 설정에서 이름과 순서를 바꿀 수 있습니다.",
+  "category": "도구",
+  "publisher": "eiaserinnys",
+  "release": 1,
+  "listed": true,
+  "icon": "assets/icon.svg",
+  "assets": [
+    {
+      "id": "todo-client",
+      "version": 1,
+      "file": "assets/todo-client.javascript",
+      "format": "javascript",
+      "source": "서소영 작성",
+      "license": "MIT"
+    },
+    {
+      "id": "todo-icon",
+      "version": 1,
+      "file": "assets/icon.svg",
+      "format": "svg",
+      "source": "서소영 작성(유리 타일 app_icon.py)",
+      "license": "MIT"
+    }
+  ]
+}

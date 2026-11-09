@@ -1,0 +1,155 @@
+{
+  "areas": [
+    "업무",
+    "개인"
+  ],
+  "items": [
+    {
+      "id": "t-report",
+      "title": "분기 보고서",
+      "area": "업무",
+      "parent": null,
+      "status": "open",
+      "date": null,
+      "wait": null,
+      "done": null,
+      "order": 0
+    },
+    {
+      "id": "t-collect",
+      "title": "자료 모으기",
+      "area": "업무",
+      "parent": "t-report",
+      "status": "done",
+      "date": null,
+      "wait": null,
+      "done": -1,
+      "order": 0
+    },
+    {
+      "id": "t-draft",
+      "title": "초안 쓰기",
+      "area": "업무",
+      "parent": "t-report",
+      "status": "open",
+      "date": null,
+      "wait": "팀장 검토",
+      "done": null,
+      "order": 1
+    },
+    {
+      "id": "t-slides",
+      "title": "발표 자료 만들기",
+      "area": "업무",
+      "parent": null,
+      "status": "open",
+      "date": null,
+      "wait": null,
+      "done": null,
+      "order": 1
+    },
+    {
+      "id": "t-room",
+      "title": "회의실 예약",
+      "area": "업무",
+      "parent": null,
+      "status": "open",
+      "date": 1,
+      "wait": null,
+      "done": null,
+      "order": 2
+    },
+    {
+      "id": "t-quote",
+      "title": "거래처 견적 비교",
+      "area": "업무",
+      "parent": null,
+      "status": "held",
+      "date": null,
+      "wait": null,
+      "done": null,
+      "order": 3
+    },
+    {
+      "id": "t-passport",
+      "title": "여권 갱신 신청",
+      "area": "업무",
+      "parent": null,
+      "status": "done",
+      "date": null,
+      "wait": null,
+      "done": -6,
+      "order": 4
+    },
+    {
+      "id": "t-library",
+      "title": "도서 반납",
+      "area": "업무",
+      "parent": null,
+      "status": "done",
+      "date": null,
+      "wait": null,
+      "done": -13,
+      "order": 5
+    },
+    {
+      "id": "t-shop",
+      "title": "장보기",
+      "area": "개인",
+      "parent": null,
+      "status": "open",
+      "date": null,
+      "wait": null,
+      "done": null,
+      "order": 0
+    },
+    {
+      "id": "t-milk",
+      "title": "우유",
+      "area": "개인",
+      "parent": "t-shop",
+      "status": "open",
+      "date": null,
+      "wait": null,
+      "done": null,
+      "order": 0
+    },
+    {
+      "id": "t-eggs",
+      "title": "달걀",
+      "area": "개인",
+      "parent": "t-shop",
+      "status": "done",
+      "date": null,
+      "wait": null,
+      "done": 0,
+      "order": 1
+    },
+    {
+      "id": "t-soap",
+      "title": "세제",
+      "area": "개인",
+      "parent": "t-shop",
+      "status": "open",
+      "date": null,
+      "wait": null,
+      "done": null,
+      "order": 2
+    },
+    {
+      "id": "t-dentist",
+      "title": "치과 예약",
+      "area": "개인",
+      "parent": null,
+      "status": "open",
+      "date": 7,
+      "wait": null,
+      "done": null,
+      "order": 1
+    }
+  ],
+  "memos": {
+    "t-draft": "## 초안 구성\n\n- 배경과 목표\n- 분기 실적\n- 다음 분기 계획\n",
+    "t-report": "## 참고\n\n- 지난 분기 자료는 공유 폴더에 있다\n"
+  }
+}
